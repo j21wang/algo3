@@ -102,6 +102,8 @@ of the chopsticks as possible? Describe a greedy algorithm of time
 complexity $O(n\log n)$ to solve this problem and prove the
 correctness of your algorithm.\\
 
+\noindent First, we can sort the chopsticks from shortest to longest using mergesort. The runtime of mergesort is $nlogn$. After we sort them, we can start from the shortest chopsticks and grab them in pairs. In the pair that was grabbed, we can take the longer chopstick length and subtract that by the shorter chopstick length. If the result of the subtraction is less than or equal to $k$, then we can put those chopsticks aside as a pair. If the result of the subtraction is greater than $k$, then we can discard the smaller chopstick in the pair and grab the next chopstick in the list of sorted chopsticks to pair with the "greater" chopstick if their difference in length is less than or equal to $k$. Traverse through the list of chopsticks by always looking at the smallest two chopsticks, and repeat the subtraction process above until no chopsticks are left to pair. Traversing through the list of chopsticks requires one iteration only, giving us a running time of $n$, so we have $O(nlogn + n)$, which is equal to $O(nlogn)$.\\
+
 \noindent {\bf B.} Consider now a variant of the above problem. You
 can still only pair chopsticks that differ at most $k$ in length. But
 now a value $w_{i}$ is also associated with each individual
@@ -158,7 +160,28 @@ years.\\
 \noindent Provide an efficient algorithm that determines whether it is
 possible to make such an assignment. If it is possible to do so, the
 algorithm should return the assignment of these two tables. What is
-the running time?
+the running time?\\
+
+\noindent Given a list of international conflicts of size $n$ and a list of guests from each country of size $m$:\\
+\begin{enumerate}
+\item Iterate through the list of guests and create a hash map where the key is the contry and the value is the guest's name. ($O(m)$)
+\item Create a queue that will be used to store the first node of each disconnected graph.
+\item Traverse the list of international conflicts. ($O(n)$) For each country1 and country2 that has a conflict:
+\begin{itemize}
+\item Use the hash map to check if country1 has a person ($O(1)$). If country1 has a person and is not already on the graph, then add that country's person as a node to the graph ($O(1)$). If country1 has person and is already on the graph or if country1 does not have person, then don't add anything to the graph.
+\item Use the hash map to check if country2 has a person ($O(1)$). If country2 has a person and is not already on the graph, then add that country's person as a node to the graph ($O(1)$). If country2 has person and is already on the graph or if country2 does not have person, then don't add anything to the graph.
+\item If both nodes are on the graph, then a strongly connected relationship should be denoted between these two nodes.
+\item If a disconnected graph has been created, then add one of the nodes from that graph to the queue so that we can keep track of all of the disconnected graphs ($O(1)$).
+\end{itemize}
+\item Create two arrays: one for table1 and another for table2.
+\item Dequeue from the queue ($O(1)$), and starting from that node, and using BFS, traverse through one of the graphs. At the first node of that graph, add it to table1. For all the neighbors of that node, add them to table2 if they do not already exist in table2 since being neighbors denote a conflict, which means that two nodes that are neighbors cannot be in the same table, or array.
+\item Continue to traverse using BFS until all nodes have been visited, and everytime we're on a new node, make sure that it does not already exist in a table and that it is not added to the same table as its neighbors that have already been visited. If we find that we cannot add a node to either table because it already has visited neighbors in both tables, then we stop and return false. Otherwise, we continue to dequeue and repeat steps repeat steps 5 and 6 until the queue is empty, and we return the two arrays of tables.
+\end{enumerate}
+
+\noindent Without taking into consideration the running time of BFS, we have $O(m+n)$ so far. For BFS, let $E$ be the count of all edges in the graph, and there are $m$ nodes, or vertices. The total running time is of BFS is $O(|E|+|m|)$. Therefore, we have $O(m+n+E+m) = O(m+n+E)$.
+
+
+
 
 \end{document}
 
