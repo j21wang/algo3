@@ -46,48 +46,64 @@
 \vspace{0.1in}
 
 \begin{center}
-{\bf {\large Homework 3}}\\
-Dynamic Programming and Graph Search\\
+{\bf {\large Homework 3}}
+Dynamic Programming and Graph Search
 \end{center}
 
 \begin{center}
 {\bf Matt Demusz, Frank Porco, Joyce Wang}
 \end{center}
 
-{\bf }
-
 \begin{center}
 {\bf Part A (35 points)}
 \end{center}
 
-\noindent {\bf Problem 1:} You are participating in the design of a
-new stepping stones challenge for the remake of the cult Japanese TV
-show ``Takeshi's Castle''.\\
+\noindent {\bf Problem 1:} 
 
-\noindent The challenge involves a team of two people tied with a rope
-that need to walk over a sequence of stepping stones. The first
-teammate is allowed to go over the stepping stones that are painted
-red $\{r_0, \ldots, r_n\}$, while the second teammate is allowed to go
-over the stepping stones that are painted blue $\{b_0, \ldots,
-b_m\}$. For the team to win, the two players have to walk over all the
-stepping stones in the corresponding sequence while they are connected
-with the rope. The teammates are not allowed to backtrack. At each
-point in time, either one of the players can jump from her current
-stone to the next one and the other one stays at his current stone, or
-both of them jump simultaneously from their current stones to the next
-ones. Such a jump is obviously feasible only if the distances between
-the two players before and after the jump are less than the length of
-the rope connecting them.\\
+\begin{algorithm}[h]
+\caption{  Minimum rope length algorithm (Node src1, Node src2)}
+\label{algo}
+int minLen = distance(src1, src2);\\
+int move1, move2, both;\\
+Node temp1 = src1;\\
+Node temp2 = src2;\\
+{\bf {while}} (temp1.hasNext() OR temp2.hasNext()):\\
+	\hspace{.5in}{\bf {if}} (temp1.hasNext() AND !temp2.hasNext()):\\
+		\hspace{1in}move1 = distance(temp1.next, temp2);\\
+		\hspace{1in}{\bf {if}} (move1 > minLen):\\
+			\hspace{1.5in}minLen = move1;\\
+		\hspace{1in}temp1 = temp1.next;\\
+	\hspace{.5in}{\bf {else if}} (!temp1.hasNext() AND temp2.hasNext()):\\
+		\hspace{1in}move2 = distance(temp1, temp2.next);\\
+		\hspace{1in}{\bf {if}} (move2 > minLen):\\
+			\hspace{1.5in}minLen = move2;\\
+		\hspace{1in}temp2 = temp2.next;\\
+	\hspace{.5in}{\bf {else:}}\\
+		\hspace{1in}move1 = distance(temp1.next, temp2);\\
+		\hspace{1in}move2 = distance(temp1, temp2.next);\\
+		\hspace{1in}both = distance(temp1.next, temp2.next);\\
+		\hspace{1in}{\bf {if}} (min(move1, move2, both) == both):\\
+			\hspace{1.5in}{\bf {if}} (both > minLen):\\
+				\hspace{2in}minLen = both;\\
+			\hspace{1.5in}temp1 = temp1.next;\\
+			\hspace{1.5in}temp2 = temp2.next;\\
+		\hspace{1in}{\bf {else if}} (min(move1, move2, both) == move1):\\
+			\hspace{1.5in}{\bf {if}} (move1 > minLen):\\
+				\hspace{2in}minLen = move1;\\
+			\hspace{1.5in}temp1 = temp1.next;\\
+		\hspace{1in}{\bf {else:}}\\
+			\hspace{1.5in}{\bf {if}} (move2 > minLen):\\
+				\hspace{2in}minLen = move2;\\
+			\hspace{1.5in}temp2 = temp2.next;\\
+{\bf {return}} minLen;\\
+		
+\end{algorithm}
 
-\noindent The TV show producer has already built the two sequences of
-red and blue stepping stones. Given the coordinates of the stepping
-stones, your task is to select the minimum length of the rope for
-which it is possible for the two players to win the game. This is what
-will make the show entertaining for the audience!\\
-
-\noindent Provide an algorithm for this computation and argue its
-running time.
-
+\noindent {\bf {Run Time:}}  If we assume the distance function to be constant time, then the overall run time 
+of this algorithm would be O(n + m) with n being the number of red stones, and m being the number of blue 
+stones.  All of the variable assignments and the checks are constant time, and they run as many times as
+the while loop does.  The maximum number of times this loop can run is the case where the shortest 
+rope length is when one player jumps, and the other stands still every time.  This in total would be n + m times, leaving the overall running time as O(n + m).
 
 \begin{center}
 {\bf Part B (35 points)}
