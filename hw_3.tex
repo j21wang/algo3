@@ -58,7 +58,15 @@ Dynamic Programming and Graph Search
 {\bf Part A (35 points)}
 \end{center}
 
-\noindent {\bf Problem 1:} 
+\noindent {\bf Problem 1:} \\
+
+\noindent {\bf Assumptions:}
+\begin{itemize}
+\item Each player only has one possible path to follow.
+\item Calculating the distance between two stones happens in constant time.
+\item We have a stone.hasNext() that returns true if there is a next stone to jump to
+\item We have a stone.next that represents the player jumping to the next stone 
+\end{itemize}
 
 \begin{algorithm}[h]
 \caption{  Minimum rope length algorithm (Node src1, Node src2)}
