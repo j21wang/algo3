@@ -169,13 +169,48 @@ has already visited.\\
 \noindent {\bf A.} Given a start location for your robot and a target
 location, provide an efficient algorithm that will return all the
 possible paths from the start to the target.  What is the running time
-for your algorithm?\\
+for your algorithm?\\\\
+{\bfseries ANSWER: }You can use a modified depth-first search:\\
+Nodes aren't marked as visited because we're looking for all possible
+paths instead of just searching if a node is in the graph. The graph
+is a DAG as specified in the problem, so there aren't any cycles that
+would cause an infinite loop with this modification. You start at the
+starting vertex/node C and call DFS on each adjacent node N with an
+edge from C to N. You go as deep as you can each time, stopping
+when you reach the target or a vertex with no edges to adjacent nodes.
+You can use a stack to keep track of nodes that you're visiting, pushing
+each new node you move to onto the stack. When you get to the
+target, you can look at the stack (e.g. pop all into another
+stack to see the path, and push them back onto the original stack to
+maintain the path) to see each node/vertex that was visited. Every time
+a path is found, it can be added to a structure like an ArrayList. Each
+time you backtrack, you pop a node off the stack. You will end up with a list of all possible paths from the starting
+location to the target location. This method has an exponential runtime O(2\^ |V|) because
+you have to find every possible path (and not just count the number of different paths).\\
 
 \noindent {\bf B.} You want to check if the topological map provides
 enough information for your robot to be able to visit all the rooms so
 as to clean them. Provide an efficient algorithm that will be able to
 check if there is a path for the robot on the graph that can visit all
-the rooms (i.e., nodes on the graph).\\
+the rooms (i.e., nodes on the graph).\\\\
+{\bfseries ANSWER: }You can use a topological sorting algorithm to sort
+the nodes in the DAG into an ordered list:\\
+Create an empty list that will store the sorted vertices. Define a
+function ``visit'' and call it on the starting vertex:
+\begin{enumerate}
+\item If the current vertex/node C has not been visited yet, call visit on each node N with an
+edge from C to N.
+\item Mark C as visited
+\item Add C to the front of the list
+\end{enumerate}
+\noindent This topological sort has a runtime of O(|E|+|V|) because you
+have do one check for every edge in the graph (has it been visited) and
+call visit once on each vertex/node in the graph.\\\\
+Then, you can check if each vertex has an edge to the next vertex (i.e. each adjacent
+pair of vertices has an edge between them). If each pair has an edge,
+there is a path through each node/room that only visits each node/room
+once. You have to perform |V|-1 checks, so this has a runtime of O(|V|).\\\\
+This method has an overall runtime of 2|V|+|E| = O(|V|+|E|).\
 
 \begin{center}
 {\bf Part D (20 points)}
